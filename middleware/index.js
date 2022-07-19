@@ -1,7 +1,14 @@
 const jwksRsa = require('jwks-rsa');
 const jwt = require('express-jwt');
+const { expressjwt: jwt }= require('express-jwt');
+require('dotenv').config();
 
 const logger = () => {}
+//console logs route path of request and the time it happened
+const logger = (req, res, next) => {
+  console.log('Logging route:', req.path, new Date().toISOString())
+  next();
+}
 
 const checkJwt = jwt({
   secret: jwksRsa.expressJwtSecret({
@@ -15,7 +22,6 @@ const checkJwt = jwt({
   issuer: `https://${process.env.AUTH0_DOMAIN}/`,
   algorithms: ['RS256']
 });
-
 module.exports = {
   logger,
   checkJwt
